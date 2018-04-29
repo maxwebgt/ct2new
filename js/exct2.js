@@ -35,19 +35,30 @@ function ct_init() {
 
 function cl_gElemControl(e) {
     mconf.opened = true;
-    cl_gHtml(mbName, 'div', '', {"position" : "absolute", "left" : e.pageX, "top" : e.pageY}, {"value":"123"}, document.body)
+    cl_gHtml(mbName, 'div', '', {"position" : "absolute", "left" : e.pageX, "top" : e.pageY, "width" : "300px"}, {"value":"123"}, document.body)
 
     if (opt.opacity) {
-        cl_gHtml('cl_el-opacity', 'input', '', {}, {
+
+        cl_gHtml('cl_block-opacity', 'div', '', {"position" : "relative"}, {}, $("#" + mbName));
+
+        cl_gHtml('', 'div', 'opacity', {}, {}, $("#cl_block-opacity"));
+
+        cl_gHtml('', 'input', '', {}, {
+            "type" : "text",
+            "value" : getComputedStyle(e.target).opacity
+        }, $("#cl_block-opacity")).on("input change", this, (event) => {
+            $(e.target).css('opacity', event.target.value);
+        })
+
+        cl_gHtml('', 'input', '', {}, {
             "type" : "range",
             "min" : "0",
             "max" : "1",
             "step" : "0.01",
             "value" : getComputedStyle(e.target).opacity
-        }, $("#" + mbName)).on("input", this, (event) => {
-            // console.log(event.target.value);
-            // console.log(e.target)
+        }, $("#cl_block-opacity")).on("input change", this, (event) => {
             $(e.target).css('opacity', event.target.value);
+            $("#cl_block-opacity").children().attr("value", event.target.value);
         })
     }
 
