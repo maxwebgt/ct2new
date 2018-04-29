@@ -17,16 +17,22 @@ function ct_init() {
     $(document).on("click", (e) => {
         console.log(e.pageX + ' ' + e.pageY);
 
+
+        // вот эта функция должна менять левел селектора, как минимум повышать его.
+        cl_gHtml('cl_level-control', 'div', 'LL', {"position" : "absolute"}, {}, document.body).on("click", () => {
+            console.log($(e.target).parent());
+        });
+
         // если клик по нашим элементам то не запускать функцию генерации элементов
         if ($(e.target).closest('#'+mbName).length) return;
 
         if ( mconf.enable ) {
 
-            ct_highlight(e.target);
+            ct_highlight(e.target); //пишем функцию которая по клику на елемент будет подсвечивать его
             cl_gElemControl(e);
         }
 
-        //пишем функцию которая по клику на елемент будет подсвечивать его
+
 
 
     })
@@ -39,10 +45,13 @@ function cl_gElemControl(e) {
 
     if (opt.opacity) {
 
+        // генерируем обёртку
         cl_gHtml('cl_block-opacity', 'div', '', {"position" : "relative"}, {}, $("#" + mbName));
 
+        // генерируем тайтл
         cl_gHtml('', 'div', 'opacity', {}, {}, $("#cl_block-opacity"));
 
+        // генерируем текстовый инпут
         cl_gHtml('', 'input', '', {}, {
             "type" : "text",
             "value" : getComputedStyle(e.target).opacity
@@ -50,6 +59,7 @@ function cl_gElemControl(e) {
             $(e.target).css('opacity', event.target.value);
         })
 
+        // генерируем ползунок
         cl_gHtml('', 'input', '', {}, {
             "type" : "range",
             "min" : "0",
@@ -73,7 +83,7 @@ function ct_highlight(e) {
 
 
 function cl_gHtml(id, tag, html, css, attr, target) {
-    console.log(target);
+    // console.log(target);
      return $(document.createElement(tag))
         .attr('id', id)
         .html(html)
