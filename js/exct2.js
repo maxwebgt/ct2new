@@ -5,6 +5,8 @@ function ct_init() {
    //main block name
    mbName = 'ct_main';
 
+
+
     $(document).on("click", "", (e) => {
         console.log(e.pageX + ' ' + e.pageY);
         //пишем функцию которая по клику на елемент будет подсвечивать его
@@ -19,14 +21,20 @@ function ct_init() {
         //     .attr('id', mbName)
         //     .html('asdasdasd');
 
+        cl_gElemControl();
 
-        cl_gHtml(mbName, 'div', 'zz', {"position" : "absolute", "left" : e.pageX, "top" : e.pageY}, {"value":"123"}, document.body)
-        cl_gHtml('hztestid', 'input', '', {}, {"type":"range","value":""}, $("#" + mbName))
     })
 };
 
 
+function cl_gElemControl() {
+    cl_gHtml(mbName, 'div', 'zz', {"position" : "absolute", "left" : e.pageX, "top" : e.pageY}, {"value":"123"}, document.body)
 
+
+
+
+    cl_gHtml('hztestid', 'input', '', {}, {"type":"range","value":""}, $("#" + mbName))
+}
 
 
 function ct_highlight(e) {
