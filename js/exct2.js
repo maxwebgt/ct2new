@@ -17,31 +17,15 @@ function ct_init() {
 
     $(document).on("click", (e) => {
 
-        //parser for box-shadow 6 properties
-        // shift w
-        // shift y
-        // blur
-        // scale
-        // inset outset
-        // color
         console.log(getComputedStyle(e.target).boxShadow);
         sixPropParse(getComputedStyle(e.target).boxShadow);
-        // bsNotParse = getComputedStyle(e.target).boxShadow;
-        //
-        // parsedShadow = {
-        //     "xshift" : "",
-        //     "yshift" : "",
-        //     "blur" : "",
-        //     "scale" : "",
-        //     "inset" : "true",
-        //     "color" : ""
-        // };
 
-        // console.log(e.pageX + ' ' + e.pageY);
+
         // вот эта функция должна менять левел селектора, как минимум повышать его.
         cl_gHtml('cl_level-control', 'div', '<i>top_arrow</i>', {"position" : "absolute"}, {}, document.body).on("click", () => {
             console.log($(e.target).parent());
         });
+
         // если клик по нашим элементам то не запускать функцию генерации элементов
         if ($(e.target).closest('#'+mbName).length) return;
         if ( mconf.enable ) {
@@ -85,39 +69,58 @@ function ct_init() {
         }
 
         if (opt.boxShadow) {
-            console.log("boxShadow")
+            // console.log("boxShadow")
+            // генерируем главный блок расположения всех элементов свойства на примере box-boxShadow
+            // div cl_box-shadow
+            // далее идёт обёртка для отдельного элемента свойства, например box-sdadow-width
+            //     div cl_box-shadow--width
+            //         div title
+            //         div input
+            //         div input
+            //
+
 
             nameDiv = "cl_block-boxShadow";
             // генерируем главную обёртку
             cl_gHtml(nameDiv, 'div', 'Box Shadow', {"position" : "relative"}, {}, $("#" + mbName));
 
-            nameDivOption = 'cl_block-boxShadow--width';
-            // генерируем обёртку для свойств свойств)))
-            cl_gHtml(nameDivOption, 'div', '', {"position" : "relative"}, {}, $("#" + nameDiv));
+            ///////////////
+            ///for section
+            // =====================
+           for (i = 0 ; i < parsedShadow.param.length; i++) {
+               console.log("one?" + i);
+               nameDivOption = 'cl_block-boxShadow--' + i;
+               // генерируем обёртку для свойств свойств)))
+               cl_gHtml(nameDivOption, 'div', '', {"position" : "relative"}, {}, $("#" + nameDiv));
 
-            // генерируем тайтл
-            cl_gHtml('', 'div', 'box-shadow-width', {}, {}, $("#" + nameDivOption));
+               // генерируем тайтл
+               cl_gHtml('', 'div', i, {}, {}, $("#" + nameDivOption));
 
-            // генерируем текстовый инпут
-            cl_gHtml('', 'input', '', {}, {
-                "type" : "text",
-                "value" : "getComputedStyle(e.target).opacity"
-            }, $("#" + nameDivOption)).on("input change", this, (event) => {
-                //$(e.target).css('opacity', event.target.value);
-                // тут пока ничего так как хз куда и шо вешать хД)
-            })
+               // генерируем текстовый инпут
+               cl_gHtml('', 'input', '', {}, {
+                   "type" : "text",
+                   "value" : parsedShadow.param[i]
+               }, $("#" + nameDivOption)).on("input change", this, (event) => {
+                   //$(e.target).css('opacity', event.target.value);
+                   // тут пока ничего так как хз куда и шо вешать хД)
+               })
 
-            // генерируем ползунок
-            cl_gHtml('', 'input', '', {}, {
-                "type" : "range",
-                "min" : "0",
-                "max" : "1",
-                "step" : "0.01",
-                "value" : "getComputedStyle(e.target).opacity"
-            }, $("#" + nameDivOption)).on("input change", this, (event) => {
-                // $(e.target).css('opacity', event.target.value);
-                // $("#cl_block-opacity").children().attr("value", event.target.value);
-            })
+               // генерируем ползунок
+               cl_gHtml('', 'input', '', {}, {
+                   "type" : "range",
+                   "min" : "-200",
+                   "max" : "200",
+                   "step" : "1",
+                   "value" : parsedShadow.param[i].replace(/\D+/g, "")
+               }, $("#" + nameDivOption)).on("input change", this, (event) => {
+                   // $(e.target).css('opacity', event.target.value);
+                   // $("#cl_block-opacity").children().attr("value", event.target.value);
+               })
+           }
+            ///////////////
+            ///end for section
+            // =====================
+
         }
 
     }
@@ -137,29 +140,14 @@ function ct_init() {
             .appendTo(target)
     }
 
-    //experimental function wrapper
-
-
-    function cl_gline(idblock, title) {
-
-        // генерируем главный блок расположения всех элементов свойства на примере box-boxShadow
-        // div cl_box-shadow
-        // далее идёт обёртка для отдельного элемента свойства, например box-sdadow-width
-        //     div cl_box-shadow--width
-        //         div title
-        //         div input
-        //         div input
-        //
-
-
-    }
-
-
-    //==end fun wraper
-
-
     function sixPropParse(str) {
-
+      //parser for box-shadow 6 properties
+        // shift w
+        // shift y
+        // blur
+        // scale
+        // inset outset
+        // color
         parsedShadow = {
             "param" :
                 [],
@@ -182,16 +170,16 @@ function ct_init() {
                 parsedShadow.inset = true;
             }
             else if(/(\d)(px|rem|pr)/.test(box_array[i])) {
-                console.log('this elem is a variable');
+                // console.log('this elem is a variable');
                 parsedShadow.param.push(box_array[i])
             }
             else if(/rgb/.test(box_array[i])) {
                 parsedShadow.color.origin = box_array[i];
                 parsedShadow.color.type = 'rgb';
                 str = box_array[i].replace(/(rgba|rgb)\((.*)(?:\))/, '$2');
-                console.log(str);
+                // console.log(str);
                 gg = str.split(",");
-                console.log(gg.length)
+                // console.log(gg.length)
 
                 parsedShadow.color.r = gg[0];
                 parsedShadow.color.g = gg[1];
@@ -200,11 +188,11 @@ function ct_init() {
                 // if (gg.length == 4 ) {
                 parsedShadow.color.o = gg[3] || "1";
                 // }
-
             }
 
         }
         console.log(parsedShadow)
+        return parsedShadow;
     }
 
 
