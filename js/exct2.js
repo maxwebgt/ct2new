@@ -16,6 +16,27 @@ function ct_init() {
     mbName = 'ct_main';
 
     $(document).on("click", (e) => {
+
+        //parser for box-shadow 6 properties
+        // shift w
+        // shift y
+        // blur
+        // scale
+        // inset outset
+        // color
+        console.log(getComputedStyle(e.target).boxShadow);
+        sixPropParse(getComputedStyle(e.target).boxShadow);
+        // bsNotParse = getComputedStyle(e.target).boxShadow;
+        //
+        // parsedShadow = {
+        //     "xshift" : "",
+        //     "yshift" : "",
+        //     "blur" : "",
+        //     "scale" : "",
+        //     "inset" : "true",
+        //     "color" : ""
+        // };
+
         // console.log(e.pageX + ' ' + e.pageY);
         // вот эта функция должна менять левел селектора, как минимум повышать его.
         cl_gHtml('cl_level-control', 'div', '<i>top_arrow</i>', {"position" : "absolute"}, {}, document.body).on("click", () => {
@@ -135,6 +156,58 @@ function ct_init() {
 
 
     //==end fun wraper
+
+
+    function sixPropParse(str) {
+
+        parsedShadow = {
+            "param" :
+                [],
+            // {
+            //     "xshift" : "",
+            //     "yshift" : "",
+            //     "blur" : "",
+            //     "scale" : "",
+            // },
+            "inset" : false,
+            "color" : {}
+        };
+
+        str = str.replace(/,\s|\s,/ig, ",");
+        box_array = str.split(" ");
+
+        for (i = 0; i < box_array.length; i++) {
+
+            if(/inset/.test(box_array[i])) {
+                parsedShadow.inset = true;
+            }
+            else if(/(\d)(px|rem|pr)/.test(box_array[i])) {
+                console.log('this elem is a variable');
+                parsedShadow.param.push(box_array[i])
+            }
+            else if(/rgb/.test(box_array[i])) {
+                parsedShadow.color.origin = box_array[i];
+                parsedShadow.color.type = 'rgb';
+                str = box_array[i].replace(/(rgba|rgb)\((.*)(?:\))/, '$2');
+                console.log(str);
+                gg = str.split(",");
+                console.log(gg.length)
+
+                parsedShadow.color.r = gg[0];
+                parsedShadow.color.g = gg[1];
+                parsedShadow.color.b = gg[2];
+
+                // if (gg.length == 4 ) {
+                parsedShadow.color.o = gg[3] || "1";
+                // }
+
+            }
+
+        }
+        console.log(parsedShadow)
+    }
+
+
 
 
     /// end of block init_ct
