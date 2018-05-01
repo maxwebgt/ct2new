@@ -117,9 +117,9 @@ function ct_init() {
                    // $("#cl_block-opacity").children().attr("value", event.target.value);
                })
            }
-            ///////////////
-            ///end for section
             // =====================
+            ///end for section
+            ///////////////
 
         }
 
@@ -158,9 +158,27 @@ function ct_init() {
             //     "scale" : "",
             // },
             "inset" : false,
-            "color" : {}
-        };
+            "color" : {},
+            "reload" : function (target) {
 
+                // not work correct
+                localstr = "";
+
+                console.log(this.color.origin)
+                if (!this.color.origin) {
+                    console.log(" цвета нету")
+                }
+                else {
+                    localstr = this.color.origin + " ";
+                }
+                if (this.inset == true) localstr += "inset ";
+
+                console.log("generate string: " + localstr);
+                // not work correct
+
+            }
+        };
+        // parsedShadow.reload();
         str = str.replace(/,\s|\s,/ig, ",");
         box_array = str.split(" ");
 
