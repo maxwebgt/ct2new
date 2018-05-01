@@ -8,7 +8,8 @@ function ct_init() {
         "opened" : true
     };
     opt = { //options
-        "opacity" : true
+        "opacity" : true,
+        "boxShadow" : true
     };
 
     //main block name
@@ -61,6 +62,43 @@ function ct_init() {
                 $("#cl_block-opacity").children().attr("value", event.target.value);
             })
         }
+
+        if (opt.boxShadow) {
+            console.log("boxShadow")
+
+            nameDiv = "cl_block-boxShadow";
+            // генерируем главную обёртку
+            cl_gHtml(nameDiv, 'div', 'Box Shadow', {"position" : "relative"}, {}, $("#" + mbName));
+
+            nameDivOption = 'cl_block-boxShadow--width';
+            // генерируем обёртку для свойств свойств)))
+            cl_gHtml(nameDivOption, 'div', '', {"position" : "relative"}, {}, $("#" + nameDiv));
+
+            // генерируем тайтл
+            cl_gHtml('', 'div', 'box-shadow-width', {}, {}, $("#" + nameDivOption));
+
+            // генерируем текстовый инпут
+            cl_gHtml('', 'input', '', {}, {
+                "type" : "text",
+                "value" : "getComputedStyle(e.target).opacity"
+            }, $("#" + nameDivOption)).on("input change", this, (event) => {
+                //$(e.target).css('opacity', event.target.value);
+                // тут пока ничего так как хз куда и шо вешать хД)
+            })
+
+            // генерируем ползунок
+            cl_gHtml('', 'input', '', {}, {
+                "type" : "range",
+                "min" : "0",
+                "max" : "1",
+                "step" : "0.01",
+                "value" : "getComputedStyle(e.target).opacity"
+            }, $("#" + nameDivOption)).on("input change", this, (event) => {
+                // $(e.target).css('opacity', event.target.value);
+                // $("#cl_block-opacity").children().attr("value", event.target.value);
+            })
+        }
+
     }
 
     function ct_highlight(e) { // функция подсветки элемента с которым осуществляется работа
@@ -77,6 +115,29 @@ function ct_init() {
             .attr(attr)
             .appendTo(target)
     }
+
+    //experimental function wrapper
+
+
+    function cl_gline(idblock, title) {
+
+        // генерируем главный блок расположения всех элементов свойства на примере box-boxShadow
+        // div cl_box-shadow
+        // далее идёт обёртка для отдельного элемента свойства, например box-sdadow-width
+        //     div cl_box-shadow--width
+        //         div title
+        //         div input
+        //         div input
+        //
+
+
+    }
+
+
+    //==end fun wraper
+
+
+    /// end of block init_ct
 }
 
 
